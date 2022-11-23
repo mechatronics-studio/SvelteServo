@@ -64,7 +64,7 @@ The number of significant digits must be carefully chosen to support the accurac
 
 ### **Scientific Integer Notation Multiplication**
 
-Given two numbers represented by, $N_1 = C_1*10^{E_1}$, and $N_2 = C_2*10^{E_2}$, their multiplication $N_3 = N_1 * N_2$ is given by the following algorithm.
+Given two numbers represented by, $N_1 = C_1 * 10^{E_1}$, and $N_2 = C_2 * 10^{E_2}$, their multiplication $N_3 = N_1 * N_2$ is given by the following algorithm.
 
 Multiply their coefficients:
 
