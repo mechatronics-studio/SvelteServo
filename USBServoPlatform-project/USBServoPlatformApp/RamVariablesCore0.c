@@ -1,0 +1,60 @@
+#include "RamVariablesCore0.h"
+#include "pico/stdlib.h"
+#include "pico/util/queue.h"
+#include "macro_header.h"
+#include "BezierCurve.h"
+
+
+uint8_t servo_enable_core0 = 0;
+uint8_t control_mode_core0 = DEFAULT_CONTROL_MODE;
+
+uint64_t host_time_us_at_last_sync = 0;
+int64_t  device_time_minus_host_time_us = 0;
+
+uint32_t static_motor_power_supply_voltage_mv_core0 = DEFAULT_STATIC_MOTOR_POWER_SUPPLY_VOLTAGE_MV;
+
+uint8_t enable_simulated_servo_core0 = 0;
+
+uint32_t simulated_servo_update_interval_us_core0 = DEFAULT_SIMULATED_SERVO_UPDATE_INTERVAL_US;
+
+uint32_t simulated_servo_voltage_mv_core0 = DEFAULT_SIMULATED_SERVO_VOLTAGE_MV;
+float simulated_servo_torque_constant_Nm_per_amp_core0 = DEFAULT_SIMULATED_SERVO_TORQUE_CONSTANT_NM_PER_AMP;
+float simulated_servo_winding_resistance_ohms_core0 = DEFAULT_SIMULATED_SERVO_WINDING_RESISTANCE_OHMS;
+uint32_t simulated_servo_counts_per_revolution_core0 = DEFAULT_SIMULATED_SERVO_COUNTS_PER_REVOLUTION;
+float simulated_servo_inertia_kg_m2_core0 = DEFAULT_SIMULATED_SERVO_INERTIA_KG_M2;
+float simulated_servo_damping_drag_coefficient_Nm_sec_per_rad_core0 = DEFAULT_SIMULATED_SERVO_DAMPING_DRAG_COEFFICIENT_NM_SEC_PER_RAD;
+float simulated_servo_kinetic_friction_torque_Nm_core0 = DEFAULT_SIMULATED_SERVO_KINETIC_FRICTION_TORQUE_NM;
+
+uint32_t proportional_gain_core0 = DEFAULT_PROPORTIONAL_GAIN;
+uint32_t derivative_gain_core0 = DEFAULT_DERIVATIVE_GAIN;
+uint32_t integral_gain_core0 = DEFAULT_INTEGRAL_GAIN;
+
+uint32_t servo_update_interval_us_core0 = DEFAULT_SERVO_UPDATE_INTERVAL_US;
+
+uint32_t desired_state_update_interval_multiplier_core0 = DEFAULT_DESIRED_STATE_UPDATE_INTERVAL_MULTIPLIER;
+
+uint8_t telemetry_reporting_mode_core0 = DEFAULT_TELEMETRY_REPORTING_MODE;
+uint32_t telemetry_reporting_interval_multiplier_core0 = DEFAULT_TELEMETRY_REPORTING_MULTIPLIER;
+
+//Core0 Unique Variables
+
+uint64_t telemetry_reporting_interval_us = DEFAULT_TELEMETRY_REPORTING_MULTIPLIER*DEFAULT_SERVO_UPDATE_INTERVAL_US;
+
+float physical_gear_ratio_counts_per_axis_output_unit = DEFAULT_GEAR_RATIO_COUNTS_PER_AXIS_OUTPUT_UNIT;
+float simulated_gear_ratio_counts_per_axis_output_unit = DEFAULT_GEAR_RATIO_COUNTS_PER_AXIS_OUTPUT_UNIT;
+
+uint8_t debug_flags[QTY_OF_NUMERICAL_COMMANDS] = {DEFAULT_DEBUG_FLAG_0,DEFAULT_DEBUG_FLAG_1,DEFAULT_DEBUG_FLAG_2,DEFAULT_DEBUG_FLAG_3,DEFAULT_DEBUG_FLAG_4,DEFAULT_DEBUG_FLAG_5,DEFAULT_DEBUG_FLAG_6,DEFAULT_DEBUG_FLAG_7,DEFAULT_DEBUG_FLAG_8,DEFAULT_DEBUG_FLAG_9,DEFAULT_DEBUG_FLAG_10,DEFAULT_DEBUG_FLAG_11,DEFAULT_DEBUG_FLAG_12,DEFAULT_DEBUG_FLAG_13,DEFAULT_DEBUG_FLAG_14,DEFAULT_DEBUG_FLAG_15,DEFAULT_DEBUG_FLAG_16,DEFAULT_DEBUG_FLAG_17,DEFAULT_DEBUG_FLAG_18,DEFAULT_DEBUG_FLAG_19,DEFAULT_DEBUG_FLAG_20,DEFAULT_DEBUG_FLAG_21,DEFAULT_DEBUG_FLAG_22,DEFAULT_DEBUG_FLAG_23,DEFAULT_DEBUG_FLAG_24,DEFAULT_DEBUG_FLAG_25,DEFAULT_DEBUG_FLAG_26,DEFAULT_DEBUG_FLAG_27,DEFAULT_DEBUG_FLAG_28,DEFAULT_DEBUG_FLAG_29,DEFAULT_DEBUG_FLAG_30,DEFAULT_DEBUG_FLAG_31,DEFAULT_DEBUG_FLAG_32,DEFAULT_DEBUG_FLAG_33,DEFAULT_DEBUG_FLAG_34,DEFAULT_DEBUG_FLAG_35,DEFAULT_DEBUG_FLAG_36,DEFAULT_DEBUG_FLAG_37,DEFAULT_DEBUG_FLAG_38,DEFAULT_DEBUG_FLAG_39,DEFAULT_DEBUG_FLAG_40,DEFAULT_DEBUG_FLAG_41,DEFAULT_DEBUG_FLAG_42,DEFAULT_DEBUG_FLAG_43,DEFAULT_DEBUG_FLAG_44,DEFAULT_DEBUG_FLAG_45,DEFAULT_DEBUG_FLAG_46};
+
+alarm_pool_t* core0_alarm_pool;
+
+bool bottango_session_connected = false;
+
+int32_t counts_per_bottango_int_signal = ((int32_t)BOTTANGO_RANGE_OF_REVOLUTIONS)/(BOTTANGO_SINGAL_RANGE_MAX_FLOAT-BOTTANGO_SINGAL_RANGE_MIN_FLOAT)*ENCODER_COUNTS_PER_REVOLUTION;
+float counts_per_bottango_float_signal = BOTTANGO_RANGE_OF_REVOLUTIONS/(BOTTANGO_SINGAL_RANGE_MAX_FLOAT-BOTTANGO_SINGAL_RANGE_MIN_FLOAT)*ENCODER_COUNTS_PER_REVOLUTION;
+
+/**
+ * This function initializes the default values for the RAM Variables hardcoded in Firmware.
+*/
+void initiate_RAM_variables_core0(){
+    core0_alarm_pool = alarm_pool_create(2, 16);
+}
