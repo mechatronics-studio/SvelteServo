@@ -101,7 +101,10 @@ const uint8_t a_stop_bits_7to0_register_least_significant_bit = 0;
 const uint8_t a_stop_bits_7to0_register_most_significant_bit = 7;
 
 const uint8_t absolute_position_bits_13to6_register = 3;
+
 const uint8_t absolute_position_bits_5to0_register = 4;
+const uint8_t absolute_position_bits_5to0_least_significant_bit = 2;
+const uint8_t absolute_position_bits_5to0_most_significant_bit = 7;
 
 const uint8_t mt6701_i2c_address = 6;
 
@@ -357,6 +360,152 @@ float decode_zero_position_value(int32_t field_value){
     }
 }
 
+
+uint32_t read_out_mode_value(){
+    int32_t status = 0;
+    status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&out_mode_register,1,true);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    } 
+
+    status = i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    }
+
+    int32_t dir_bit_result = i2c_buffer && 0b00000001 << out_mode_bit;
+
+    return dir_bit_result;
+}
+
+const char* decode_out_mode_value(int32_t bit_value){
+    switch(bit_value){
+        case 0:
+            return "ANALOG OUTPUT";
+        case 1:
+            return "PWM OUTPUT";
+    }
+}
+
+uint32_t read_a_stop_position_value(){
+    int32_t status = 0;
+    status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&a_stop_bits_11to8_register,1,true);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    } 
+
+    status = i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    }
+
+    int32_t a_stop_bits_11to8_result = i2c_buffer && generate_bit_mask(a_stop_bits_11to8_register_most_significant_bit,a_stop_bits_11to8_register_least_significant_bit);
+
+    status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&a_stop_bits_7to0_register,1,true);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    } 
+
+    status = i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    }
+
+    int32_t a_stop_bits_7to0_result = i2c_buffer;
+
+    int32_t a_stop = a_stop_bits_11to8_result << 8 || a_stop_bits_7to0_result;
+
+
+    return a_stop;
+}
+
+//Convert the zero_position field value read from EEPROM to the actual zero_position setting value in degrees. If the zero_position field value is invalid, -1 is returned.
+float decode_a_stop_value(int32_t field_value){
+    if(field_value <= 4095){
+        return (float)field_value*360/4096;
+    }
+    else{
+        return -1;
+    }
+}
+
+uint32_t read_a_start_position_value(){
+    int32_t status = 0;
+    status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&a_start_bits_11to8_register,1,true);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    } 
+
+    status = i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    }
+
+    int32_t a_start_bits_11to8_result = i2c_buffer && generate_bit_mask(a_start_bits_11to8_register_most_significant_bit,a_start_bits_11to8_register_least_significant_bit);
+
+    status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&a_start_bits_7to0_register,1,true);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    } 
+
+    status = i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    }
+
+    int32_t a_start_bits_7to0_result = i2c_buffer;
+
+    int32_t a_start = a_start_bits_11to8_result << 8 || a_start_bits_7to0_result;
+
+
+    return a_start;
+}
+
+//Convert the zero_position field value read from EEPROM to the actual zero_position setting value in degrees. If the zero_position field value is invalid, -1 is returned.
+float decode_a_start_value(int32_t field_value){
+    if(field_value <= 4095){
+        return (float)field_value*360/4096;
+    }
+    else{
+        return -1;
+    }
+}
+
+int32_t read_current_absolute_position(){
+    int32_t status = 0;/*
+    status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&absolute_position_bits_13to6_register,1,true);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    } 
+
+    status = i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    }
+
+    int32_t absolute_position_bits_13to6_result = i2c_buffer;
+
+    status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&absolute_position_bits_5to0_register,1,true);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    } 
+
+    status = i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
+    if(status == PICO_ERROR_GENERIC){
+        return PICO_ERROR_GENERIC;
+    }
+    
+    int32_t absolute_position_bits_5to0_result = i2c_buffer && generate_bit_mask(absolute_position_bits_5to0_most_significant_bit,absolute_position_bits_5to0_least_significant_bit);
+*/
+    int32_t absolute_position = 4;//(absolute_position_bits_13to6_result << 6) || absolute_position_bits_5to0_result;
+
+    return absolute_position;
+}
+
+float decode_absolute_position(int32_t field_value){
+    return (float)field_value*360/16384;
+}
+
 int32_t read_and_report_via_usb_MT6701_eeprom_values(){
     int32_t status = 0;
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&absolute_position_bits_13to6_register,1,true);
@@ -368,42 +517,11 @@ int32_t read_and_report_via_usb_MT6701_eeprom_values(){
 
 }
 
-int32_t i2c_read_absolute_position_from_MT6701(){
-    int32_t status = 0;
-    uint32_t absolute_angle;
-    status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&absolute_position_bits_13to6_register,1,true);
-    if(status == PICO_ERROR_GENERIC){
-        return PICO_ERROR_GENERIC;
-    }
-
-    status = i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
-    if(status == PICO_ERROR_GENERIC){
-        return PICO_ERROR_GENERIC;
-    }
-
-    absolute_angle = i2c_buffer << 6;
-
-    
-    status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&absolute_position_bits_5to0_register,1,true);
-    if(status == PICO_ERROR_GENERIC){
-        return PICO_ERROR_GENERIC;
-    }
-
-    status = i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
-    if(status == PICO_ERROR_GENERIC){
-        return PICO_ERROR_GENERIC;
-    }
-
-    absolute_angle = absolute_angle | (i2c_buffer && 0b11111100);
-
-    return (absolute_angle*360*1000)/16384; //Convert from 14-bit Representation to thousandths of an angle
-}
-
 /*Activates i2C pins and checks for and return true if a valid position response is recieved from MT6701 encoder.*/
 void begin_i2c_with_MT6701(){
     gpio_set_function(MT6701_I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(MT6701_I2C_SCL_PIN, GPIO_FUNC_I2C);
-    if(i2c_read_absolute_position_from_MT6701() == PICO_ERROR_GENERIC){
+    if(read_current_absolute_position() == PICO_ERROR_GENERIC){
         printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
     }    
 }
@@ -430,10 +548,24 @@ void initialize_MT6701(){
     i2c_init(i2c_default,100000);
 
     begin_i2c_with_MT6701();
+
+    int32_t dir = read_dir_bit();
+    printf("ENCODER DIR BIT: ");
+    printf(decode_dir_value(dir));
+    printf("\n");
+
     end_i2c_with_MT6701();
 
-    uint offset = pio_add_program(pio, &quadrature_encoder_program);
-    quadrature_encoder_program_init(pio, sm, offset, MT6701_channel_a_pin, 0);
+    //uint offset = pio_add_program(pio, &quadrature_encoder_program);
+    //quadrature_encoder_program_init(pio, sm, offset, MT6701_channel_a_pin, 0);
+}
+
+void print_current_absolute_position(){
+    //begin_i2c_with_MT6701();
+    int32_t current_position = read_current_absolute_position();
+    float decoded_absolute_position = decode_absolute_position(current_position);
+    printf("CURRENT POSITION: %f\n",decoded_absolute_position);
+    //end_i2c_with_MT6701();
 }
 
 
