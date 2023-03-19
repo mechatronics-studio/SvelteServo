@@ -59,10 +59,12 @@ const uint8_t dir_bit = 1;
 const uint8_t abz_resolution_bits_9to8_register = 48;
 const uint8_t abz_resolution_bits_9to8_least_significant_bit = 0;
 const uint8_t abz_resolution_bits_9to8_most_significant_bit = 1;
+const uint8_t abz_resolution_bits_9to8_size = abz_resolution_bits_9to8_most_significant_bit-abz_resolution_bits_9to8_least_significant_bit+1;
 
 const uint8_t abz_resolution_bits_7to0_register = 49;
 const uint8_t abz_resolution_bits_7to0_least_significant_bit = 0;
 const uint8_t abz_resolution_bits_7to0_most_significant_bit = 7;
+const uint8_t abz_resolution_bits_7to0_size = abz_resolution_bits_7to0_most_significant_bit-abz_resolution_bits_7to0_least_significant_bit+1;
 
 const uint8_t hyst_2_bit_register = 50;
 const uint8_t hyst_2_bit = 7;
@@ -70,48 +72,60 @@ const uint8_t hyst_2_bit = 7;
 const uint8_t hyst_bits_1to0_register = 52;
 const uint8_t hyst_bits_1to0_least_significant_bit = 6;
 const uint8_t hyst_bits_1to0_most_significant_bit = 7;
+const uint8_t hyst_bits_1to0_size = hyst_bits_1to0_most_significant_bit-hyst_bits_1to0_least_significant_bit+1;
 
 const uint8_t z_pulse_width_register = 50;
 const uint8_t z_pulse_width_least_significant_bit = 4;
 const uint8_t z_pulse_width_most_significant_bit = 6;
+const uint8_t z_pulse_width_size = z_pulse_width_most_significant_bit-z_pulse_width_least_significant_bit+1;
 
 const uint8_t zero_position_bits_11to8_register = 50;
-const uint8_t zero_position_bits_11to8_register_least_significant_bit = 0;
-const uint8_t zero_position_bits_11to8_register_most_significant_bit = 3;
+const uint8_t zero_position_bits_11to8_least_significant_bit = 0;
+const uint8_t zero_position_bits_11to8_most_significant_bit = 3;
+const uint8_t zero_position_bits_11to8_size = zero_position_bits_11to8_most_significant_bit-zero_position_bits_11to8_least_significant_bit+1;
 
 const uint8_t zero_position_bits_7to0_register = 51;
-const uint8_t zero_position_bits_7to0_register_least_significant_bit = 0;
-const uint8_t zero_position_bits_7to0_register_most_significant_bit = 7;
+const uint8_t zero_position_bits_7to0_least_significant_bit = 0;
+const uint8_t zero_position_bits_7to0_most_significant_bit = 7;
+const uint8_t zero_position_bits_7to0_size = zero_position_bits_7to0_most_significant_bit-zero_position_bits_7to0_least_significant_bit+1;
 
 const uint8_t out_mode_register = 56;
 const uint8_t out_mode_bit = 5;
 
-const uint8_t a_stop_bits_11to8_register = 62;
-const uint8_t a_stop_bits_11to8_register_least_significant_bit = 4;
-const uint8_t a_stop_bits_11to8_register_most_significant_bit = 7;
-
 const uint8_t a_start_bits_11to8_register = 62;
-const uint8_t a_start_bits_11to8_register_least_significant_bit = 0;
-const uint8_t a_start_bits_11to8_register_most_significant_bit = 3;
+const uint8_t a_start_bits_11to8_least_significant_bit = 0;
+const uint8_t a_start_bits_11to8_most_significant_bit = 3;
+const uint8_t a_start_bits_11to8_size = a_start_bits_11to8_most_significant_bit-a_start_bits_11to8_least_significant_bit+1;
 
 const uint8_t a_start_bits_7to0_register = 63;
-const uint8_t a_start_bits_7to0_register_least_significant_bit = 0;
-const uint8_t a_start_bits_7to0_register_most_significant_bit = 7;
+const uint8_t a_start_bits_7to0_least_significant_bit = 0;
+const uint8_t a_start_bits_7to0_most_significant_bit = 7;
+const uint8_t a_start_bits_7to0_size = a_start_bits_7to0_most_significant_bit-a_start_bits_7to0_least_significant_bit+1;
+
+const uint8_t a_stop_bits_11to8_register = 62;
+const uint8_t a_stop_bits_11to8_least_significant_bit = 4;
+const uint8_t a_stop_bits_11to8_most_significant_bit = 7;
+const uint8_t a_stop_bits_11to8_size = a_stop_bits_11to8_most_significant_bit-a_stop_bits_11to8_least_significant_bit+1;
 
 const uint8_t a_stop_bits_7to0_register = 64;
-const uint8_t a_stop_bits_7to0_register_least_significant_bit = 0;
-const uint8_t a_stop_bits_7to0_register_most_significant_bit = 7;
+const uint8_t a_stop_bits_7to0_least_significant_bit = 0;
+const uint8_t a_stop_bits_7to0_most_significant_bit = 7;
+const uint8_t a_stop_bits_7to0_size = a_stop_bits_7to0_most_significant_bit-a_stop_bits_7to0_least_significant_bit+1;
 
 const uint8_t absolute_position_bits_13to6_register = 3;
+const uint8_t absolute_position_bits_13to6_least_significant_bit = 0;
+const uint8_t absolute_position_bits_13to6_most_significant_bit = 7;
+const uint8_t absolute_position_bits_13to6_size = absolute_position_bits_13to6_most_significant_bit-absolute_position_bits_13to6_least_significant_bit+1;
 
 const uint8_t absolute_position_bits_5to0_register = 4;
 const uint8_t absolute_position_bits_5to0_least_significant_bit = 2;
 const uint8_t absolute_position_bits_5to0_most_significant_bit = 7;
+const uint8_t absolute_position_bits_5to0_size = absolute_position_bits_5to0_most_significant_bit-absolute_position_bits_5to0_least_significant_bit+1;
 
 const uint8_t mt6701_i2c_address = 6;
 
-const uint8_t programming_key[] = {0x09,0xB3}; 
-const uint8_t programming_command[] = {0x0A,0x05};
+const uint8_t programming_key_step1[] = {0x09,0xB3}; 
+const uint8_t programming_command_step2[] = {0x0A,0x05};
 
 uint8_t i2c_buffer;
 
@@ -123,6 +137,28 @@ uint8_t generate_bit_mask(uint8_t most_signifcant_bit, uint8_t least_significant
     }
 
     return mask;
+}
+
+uint8_t extract_bitfield(uint8_t register_value, uint8_t most_significant_bit, uint8_t least_significant_bit){
+return (register_value & generate_bit_mask(most_significant_bit,least_significant_bit)) >> least_significant_bit;
+}
+
+uint8_t extract_bit(uint8_t register_value, uint8_t bit_position){
+return (register_value & (0b00000001 << bit_position)) >> bit_position;
+}
+
+int32_t merge_two_bitfields(uint8_t upper_register, uint8_t lower_register, uint8_t size_of_lower_register){
+    return (upper_register << size_of_lower_register) | lower_register;
+}
+
+uint8_t merge_bit_onto_register(uint8_t register_value, uint8_t bit_value, uint8_t bit_position){
+    return (register_value & (0b11111111 ^ (0b00000001 << bit_position))) | (bit_value << bit_position);
+}
+
+void write_eeprom_programming_sequence(){
+    i2c_write_blocking(i2c_default,mt6701_i2c_address,programming_key_step1,2,false);
+    i2c_write_blocking(i2c_default,mt6701_i2c_address,programming_command_step2,2,false);
+    sleep_ms(1000);
 }
 
 int32_t read_abz_mux_bit(){
@@ -137,7 +173,7 @@ int32_t read_abz_mux_bit(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t abz_mux_bit_result = i2c_buffer & (0b00000001 << abz_mux_bit);
+    int32_t abz_mux_bit_result = extract_bit(i2c_buffer,abz_mux_bit);
 
     return abz_mux_bit_result;
 }
@@ -145,24 +181,56 @@ int32_t read_abz_mux_bit(){
 const char* decode_abz_mux_value(int32_t bit_value){
     switch(bit_value){
         case 0:
-            return ABZ;
+            return ABZ_KEY;
         case 1:
-            return UVW;
+            return UVW_KEY;
         default:
             return "INVALID ABZ MUX BIT VALUE";
     }
 }
 
-int8_t encode_abz_mux_value(const char* decoded_value){
-    if(decoded_value == ABZ){
+int8_t encode_abz_mux_key(const char* decoded_value){
+    if(decoded_value == ABZ_KEY){
         return 0;
     }
-    else if(decoded_value == UVW){
+    else if(decoded_value == UVW_KEY){
         return 1;
     }
     else{
         return 0;
     }
+}
+
+//Reads eeprom and checks if abz_mux key matches abz_mux_key_to_enforce. If it does not, abz_mux_key_to_enforce is converted to the corresponding value and is written to the device (but not programmed).
+bool enforce_abz_mux_by_key(const char* abz_mux_key_to_enforce){
+        int32_t abz_mux_in_eeprom = read_abz_mux_bit();
+        uint8_t abz_mux_value_to_enforce = encode_abz_mux_key(abz_mux_key_to_enforce);
+        if(abz_mux_in_eeprom == PICO_ERROR_GENERIC){
+            printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+        }
+
+        if(decode_abz_mux_value(abz_mux_in_eeprom) != abz_mux_key_to_enforce){
+            printf("ABZ_MUX EEPROM VALUE/KEY DOES NOT MATCH ENFORCED VALUE. WRITING ENFORCED VALUE/KEY: %s|%d.\n", abz_mux_key_to_enforce, abz_mux_value_to_enforce);
+
+            i2c_write_blocking(i2c_default,mt6701_i2c_address,&abz_mux_register,1,true);
+            i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
+            
+            uint8_t abz_mux_register_value = i2c_buffer;
+            
+            uint8_t default_abz_mux_bit_value = encode_abz_mux_key(DEFAULT_MT6701_ABZ_MUX_KEY);
+
+            uint8_t new_abz_mux_register_value = merge_bit_onto_register(abz_mux_register_value,abz_mux_value_to_enforce,abz_mux_bit);
+
+            uint8_t abz_mux_register_i2c_data[] = {abz_mux_register,new_abz_mux_register_value};
+
+            i2c_write_blocking(i2c_default,mt6701_i2c_address,abz_mux_register_i2c_data,2,false);
+
+            printf("ABZ_MUX EEPROM VALUE/KEY WRITTEN. WAITING FOR PROGRAMMING.");
+            return true;
+        }
+        else{
+            return false;
+        }
 }
 
 int32_t read_dir_bit(){
@@ -177,7 +245,7 @@ int32_t read_dir_bit(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t dir_bit_result = i2c_buffer & (0b00000001 << dir_bit);
+    int32_t dir_bit_result = extract_bit(i2c_buffer,dir_bit);
 
     return dir_bit_result;
 }
@@ -185,9 +253,9 @@ int32_t read_dir_bit(){
 const char* decode_dir_value(int32_t bit_value){
     switch(bit_value){
         case 0:
-            return CCW;
+            return CCW_KEY;
         case 1:
-            return CW;
+            return CW_KEY;
         default:
             return "INVALID DIRECTION BIT VALUE";
     }
@@ -205,7 +273,7 @@ int32_t read_abz_resolution_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    uint8_t abz_resolution_bits_9to8_result = i2c_buffer & generate_bit_mask(abz_resolution_bits_9to8_most_significant_bit,abz_resolution_bits_9to8_least_significant_bit);
+    uint8_t abz_resolution_bits_9to8_result = extract_bitfield(i2c_buffer,abz_resolution_bits_9to8_most_significant_bit,abz_resolution_bits_9to8_least_significant_bit);
     
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&abz_resolution_bits_7to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
@@ -217,13 +285,12 @@ int32_t read_abz_resolution_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    uint8_t abz_resolution_bits_7to0_result = i2c_buffer;
-    int32_t abz_resolution = (abz_resolution_bits_9to8_result << 8) | abz_resolution_bits_7to0_result;
+    uint8_t abz_resolution_bits_7to0_result = extract_bitfield(i2c_buffer,abz_resolution_bits_7to0_most_significant_bit,abz_resolution_bits_7to0_least_significant_bit);
+
+    int32_t abz_resolution = merge_two_bitfields(abz_resolution_bits_9to8_result,abz_resolution_bits_7to0_result,abz_resolution_bits_7to0_size);
 
     return abz_resolution;
 }
-
-char string_buffer[10];
 
 //This function converts the abz_resolution value read from EEPROM to the actual ABZ resolution. If the abz_resolution value is invalid, -1 is returned.
 int32_t decode_abz_resolution_value(int32_t field_value){
@@ -248,7 +315,7 @@ int8_t read_hyst_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t hyst_2_bit_result = i2c_buffer & (0b00000001 << hyst_2_bit);
+    uint8_t hyst_2_bit_result = extract_bit(i2c_buffer,hyst_2_bit);
 
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&hyst_bits_1to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
@@ -260,10 +327,10 @@ int8_t read_hyst_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t hyst_bits_1to0_result = i2c_buffer & generate_bit_mask(hyst_bits_1to0_most_significant_bit,hyst_bits_1to0_least_significant_bit);
+    uint8_t hyst_bits_1to0_result = extract_bitfield(i2c_buffer,hyst_bits_1to0_most_significant_bit,hyst_bits_1to0_least_significant_bit);
 
 
-    int32_t hyst = (hyst_2_bit_result << 3) | hyst_bits_1to0_result;
+    int32_t hyst = merge_two_bitfields(hyst_2_bit_result,hyst_bits_1to0_result,hyst_bits_1to0_size);
 
     return hyst;
 }
@@ -304,7 +371,7 @@ int32_t read_z_pulse_width_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t z_pulse_width_result = i2c_buffer & generate_bit_mask(z_pulse_width_most_significant_bit,z_pulse_width_least_significant_bit);
+    int32_t z_pulse_width_result = extract_bitfield(i2c_buffer,z_pulse_width_most_significant_bit,z_pulse_width_least_significant_bit);
 
     return z_pulse_width_result;
 }
@@ -345,7 +412,7 @@ uint32_t read_zero_position_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t zero_position_bits_11to8_result = i2c_buffer & generate_bit_mask(zero_position_bits_11to8_register_most_significant_bit,zero_position_bits_11to8_register_least_significant_bit);
+    uint8_t zero_position_bits_11to8_result = extract_bitfield(i2c_buffer,zero_position_bits_11to8_most_significant_bit,zero_position_bits_11to8_least_significant_bit);
 
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&zero_position_bits_7to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
@@ -357,9 +424,9 @@ uint32_t read_zero_position_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t zero_position_bits_7to0_result = i2c_buffer;
+    uint8_t zero_position_bits_7to0_result = extract_bitfield(i2c_buffer,zero_position_bits_7to0_most_significant_bit,zero_position_bits_7to0_least_significant_bit);
 
-    int32_t zero_position = (zero_position_bits_11to8_result << 8) | zero_position_bits_7to0_result;
+    int32_t zero_position = merge_two_bitfields(zero_position_bits_11to8_result,zero_position_bits_7to0_result,zero_position_bits_7to0_size);
 
 
     return zero_position;
@@ -388,9 +455,9 @@ uint32_t read_out_mode_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t dir_bit_result = i2c_buffer & (0b00000001 << out_mode_bit);
+    int32_t out_mode_bit_result = extract_bit(i2c_buffer,out_mode_bit);
 
-    return dir_bit_result;
+    return out_mode_bit_result;
 }
 
 const char* decode_out_mode_value(int32_t bit_value){
@@ -414,7 +481,7 @@ uint32_t read_a_stop_position_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t a_stop_bits_11to8_result = i2c_buffer & generate_bit_mask(a_stop_bits_11to8_register_most_significant_bit,a_stop_bits_11to8_register_least_significant_bit);
+    uint8_t a_stop_bits_11to8_result = extract_bitfield(i2c_buffer,a_stop_bits_11to8_most_significant_bit,a_stop_bits_11to8_least_significant_bit);
 
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&a_stop_bits_7to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
@@ -426,9 +493,9 @@ uint32_t read_a_stop_position_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t a_stop_bits_7to0_result = i2c_buffer;
+    uint8_t a_stop_bits_7to0_result = extract_bitfield(i2c_buffer,a_stop_bits_7to0_most_significant_bit,a_stop_bits_7to0_least_significant_bit);
 
-    int32_t a_stop = (a_stop_bits_11to8_result << 8) | a_stop_bits_7to0_result;
+    int32_t a_stop = merge_two_bitfields(a_stop_bits_11to8_result,a_stop_bits_7to0_result,a_stop_bits_7to0_size);
 
 
     return a_stop;
@@ -456,7 +523,7 @@ uint32_t read_a_start_position_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t a_start_bits_11to8_result = i2c_buffer & generate_bit_mask(a_start_bits_11to8_register_most_significant_bit,a_start_bits_11to8_register_least_significant_bit);
+    uint8_t a_start_bits_11to8_result = extract_bitfield(i2c_buffer,a_start_bits_11to8_most_significant_bit,a_start_bits_11to8_least_significant_bit);
 
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&a_start_bits_7to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
@@ -468,10 +535,9 @@ uint32_t read_a_start_position_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t a_start_bits_7to0_result = i2c_buffer;
+    uint8_t a_start_bits_7to0_result = extract_bitfield(i2c_buffer,a_start_bits_7to0_most_significant_bit,a_start_bits_7to0_least_significant_bit);
 
-    int32_t a_start = (a_start_bits_11to8_result << 8) | a_start_bits_7to0_result;
-
+    int32_t a_start = merge_two_bitfields(a_start_bits_11to8_result,a_start_bits_7to0_result,a_start_bits_7to0_size);
 
     return a_start;
 }
@@ -498,7 +564,7 @@ int32_t read_current_absolute_position(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t absolute_position_bits_13to6_result = i2c_buffer;
+    uint8_t absolute_position_bits_13to6_result = extract_bitfield(i2c_buffer,absolute_position_bits_13to6_most_significant_bit,absolute_position_bits_13to6_least_significant_bit);
 
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&absolute_position_bits_5to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
@@ -510,8 +576,8 @@ int32_t read_current_absolute_position(){
         return PICO_ERROR_GENERIC;
     }
     
-    int32_t absolute_position_bits_5to0_result = i2c_buffer & generate_bit_mask(absolute_position_bits_5to0_most_significant_bit,absolute_position_bits_5to0_least_significant_bit);
-    int32_t absolute_position = (absolute_position_bits_13to6_result << 6) | absolute_position_bits_5to0_result;
+    int32_t absolute_position_bits_5to0_result = extract_bitfield(i2c_buffer,absolute_position_bits_5to0_most_significant_bit,absolute_position_bits_5to0_least_significant_bit);
+    int32_t absolute_position = merge_two_bitfields(absolute_position_bits_13to6_result,absolute_position_bits_5to0_result,absolute_position_bits_5to0_size);
 
     return absolute_position;
 }
@@ -520,20 +586,6 @@ float decode_absolute_position(int32_t field_value){
     return (float)field_value*360/16384;
 }
 
-
-/*UVW_MUX- UVW OUTPUT TYPE [QFN PACKAGE ONLY] 0:UVW 1:-A-B-Z
-ABZ_MUX- ABZ OUTPUT TYPE 0:ABZ 1:UVW
-DIR- ROTATION DIRECTION 0:CCW 1:CW
-UVW_RES- UVW OUTPUT RESOLUTION, Between 1 and 16, STORED AS HEXADECIMAL EQUAL TO THE RESOLUTION -1 (ex. 0x1 = 2)
-ABZ_RES- ABZ OUTPUT RESOLUTION (Pulses Per Revolution), Between 1 and 1024, STORED AS HEXADECIMAL EQUAL TO THE RESOLUTION -1 (ex. 0x1 = 2)
-HYST- HYSTERESIS FILTER PARAMETER (0x0:1 0x1:2 0x2:4 0x3:8 0x4:0 0x5:.25 0x6:0.5 0x7:1)
-Z_PULSE_WIDTH- WIDTH OF THE Z PULSE IN LEAST SIGNIFICANT BITS OR DEGREES (0x0:1 0x1:2 0x3:4 0x3:8 0x4:12 0x5:16 0x6:180degrees 0x7:1)
-ZERO- ZERO DEGREE POSITION, GIVEN BY 360deg/4096*VALUE, WHERE VALUE IS BETWEEN 0 AND 4095
-PWM_FREQ- PWM FRAME FREQUENCY (0x0:994.4hz 0x1:497.2hz)
-PWM_POL- WHETHER PWM HIGH OR LOW IS DATA (0x0:HIGH 0x1:LOW)
-OUT_MODE- DETERMINES THE TYPE OF OUTPUT FROM THE 'OUT' PIN (0x0:ANALOG 0x1:PWM_OUTPUT)
-A_START- DETERMINES THE START ANGLE OF THE ANALOG OUTPUT, GIVEN BY 360deg/4096*VALUE, WHERE VALUE IS BETWEEN 0 AND 4095
-A_STOP- DETERMINES THE STOP ANGLE OF THE ANALOG OUTPUT, GIVEN BY 360deg/4096*VALUE, WHERE VALUE IS BETWEEN 0 AND 4095*/
 int32_t read_and_report_via_usb_MT6701_eeprom_values(){
     int32_t abz_mux = read_abz_mux_bit();
     if(abz_mux == PICO_ERROR_GENERIC){
@@ -624,30 +676,15 @@ void initialize_MT6701(){
     read_and_report_via_usb_MT6701_eeprom_values();
     
     if(ENFORCE_MT6701_EEPROM_DEFAULTS){
-        int32_t abz_mux = read_abz_mux_bit();
-        if(abz_mux == PICO_ERROR_GENERIC){
-            printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+        bool eeprom_values_updated = false;
+        
+        eeprom_values_updated = eeprom_values_updated || enforce_abz_mux_by_key(DEFAULT_MT6701_ABZ_MUX_KEY);
+
+        if(eeprom_values_updated){
+            write_eeprom_programming_sequence();
+            printf("EEPROM PROGRAMMING COMPLETE. UPDATED EEPROM VALUES:\n");
+            read_and_report_via_usb_MT6701_eeprom_values();
         }
-        if(decode_abz_mux_value(abz_mux) != DEFAULT_MT6701_ABZ_MUX){
-            printf("ABZ_MUX EEPROM VALUE DOES NOT MATCH ENFORCED DEFAULT. WRITING DEFAULT TO EEPROM.\n");
-
-            i2c_write_blocking(i2c_default,mt6701_i2c_address,&abz_mux_register,1,true);
-            i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
-            uint8_t abz_mux_register_value = i2c_buffer;
-
-            uint8_t default_abz_mux_bit_value = encode_abz_mux_value(DEFAULT_MT6701_ABZ_MUX);
-            uint8_t new_abz_mux_register_value = (abz_mux_register_value & (0b11111111 ^ (0b00000001 << abz_mux_bit))) | (default_abz_mux_bit_value << abz_mux_bit);
-            uint8_t abc_register_i2c_data[] = {abz_mux_register,new_abz_mux_register_value};
-            i2c_write_blocking(i2c_default,mt6701_i2c_address,abc_register_i2c_data,2,false);
-
-            i2c_write_blocking(i2c_default,mt6701_i2c_address,programming_key,2,false);
-            i2c_write_blocking(i2c_default,mt6701_i2c_address,programming_command,2,false);
-            sleep_ms(1000);
-            printf("WRITE COMPLETE. PLEASE REMOVE POWER FROM DEVICE.\n");
-
-        }
-
-        read_and_report_via_usb_MT6701_eeprom_values();
     }
 
     end_i2c_with_MT6701();
@@ -659,6 +696,7 @@ void initialize_MT6701(){
     quadrature_encoder_program_init(pio, sm, offset, MT6701_CHANNEL_A_PIN, 0);
 
     gpio_put(MT6701_ENCODER_MODE_PIN,false);
+
 }
 
 void print_current_absolute_position(){
