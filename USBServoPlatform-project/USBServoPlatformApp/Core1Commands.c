@@ -8,6 +8,7 @@
 #include "ClosedLoopServoController.h"
 #include "SimulatedServoMotor.h"
 #include "macro_header.h"
+#include "MT6701Encoder.h"
 
 /**
  * This function modifies the core1 copy of the servo_enable RAM Variable and also enables or disables the loop function corresponding to the servo loop.
@@ -633,7 +634,7 @@ void get_command_from_core0(){
     }
 }
 
-void setup_core1_command_chain(){
+void setup_core1_peripherals(){
     initialize_RAM_variables_core1();
     #ifdef MASTER_DEBUG
     printf("%lld Core1: Ram Variables Initialized.\n", time_us_64());
@@ -643,6 +644,12 @@ void setup_core1_command_chain(){
     #ifdef MASTER_DEBUG
     printf("%lld Core1: LED Initialized.\n", time_us_64());
     #endif
+
+    initialize_MT6701();
+    #ifdef MASTER_DEBUG
+    printf("%lld Core1: Enocder Initialized.\n", time_us_64());
+    #endif
+    
     set_LED_mode(3,core1_alarm_pool);
 
 }

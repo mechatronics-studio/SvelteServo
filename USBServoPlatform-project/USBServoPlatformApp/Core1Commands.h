@@ -7,6 +7,6 @@
 */
 void pop_and_execute_core1_command();
 
-void setup_core1_command_chain();
+void setup_core1_peripherals();
 
 #endif

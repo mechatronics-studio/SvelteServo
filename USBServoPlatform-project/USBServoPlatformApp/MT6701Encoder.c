@@ -7,6 +7,8 @@
 #include "hardware/pio.h"
 #include "quadrature_encoder.pio.h"
 
+#define INVALID_VALUE_TO_ENCODE -1
+
 /* REGISTER MAP & EEPROM PROGRAMMING
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
 | Reg. Address | bit7      | bit6            | bit5            | bit4            | bit3       | bit2       | bit1      | bit0      |
@@ -108,6 +110,9 @@ const uint8_t absolute_position_bits_5to0_most_significant_bit = 7;
 
 const uint8_t mt6701_i2c_address = 6;
 
+const uint8_t programming_key[] = {0x09,0xB3}; 
+const uint8_t programming_command[] = {0x0A,0x05};
+
 uint8_t i2c_buffer;
 
 uint8_t generate_bit_mask(uint8_t most_signifcant_bit, uint8_t least_significant_bit) {
@@ -132,7 +137,7 @@ int32_t read_abz_mux_bit(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t abz_mux_bit_result = i2c_buffer && 0b00000001 << abz_mux_bit;
+    int32_t abz_mux_bit_result = i2c_buffer & (0b00000001 << abz_mux_bit);
 
     return abz_mux_bit_result;
 }
@@ -140,11 +145,23 @@ int32_t read_abz_mux_bit(){
 const char* decode_abz_mux_value(int32_t bit_value){
     switch(bit_value){
         case 0:
-            return "ABZ";
+            return ABZ;
         case 1:
-            return "UVW";
+            return UVW;
         default:
             return "INVALID ABZ MUX BIT VALUE";
+    }
+}
+
+int8_t encode_abz_mux_value(const char* decoded_value){
+    if(decoded_value == ABZ){
+        return 0;
+    }
+    else if(decoded_value == UVW){
+        return 1;
+    }
+    else{
+        return 0;
     }
 }
 
@@ -160,7 +177,7 @@ int32_t read_dir_bit(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t dir_bit_result = i2c_buffer && 0b00000001 << dir_bit;
+    int32_t dir_bit_result = i2c_buffer & (0b00000001 << dir_bit);
 
     return dir_bit_result;
 }
@@ -168,9 +185,9 @@ int32_t read_dir_bit(){
 const char* decode_dir_value(int32_t bit_value){
     switch(bit_value){
         case 0:
-            return "CCW";
+            return CCW;
         case 1:
-            return "CW";
+            return CW;
         default:
             return "INVALID DIRECTION BIT VALUE";
     }
@@ -188,8 +205,8 @@ int32_t read_abz_resolution_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t abz_resolution_bits_9to8_result = i2c_buffer && generate_bit_mask(abz_resolution_bits_9to8_most_significant_bit,abz_resolution_bits_9to8_least_significant_bit);
-
+    uint8_t abz_resolution_bits_9to8_result = i2c_buffer & generate_bit_mask(abz_resolution_bits_9to8_most_significant_bit,abz_resolution_bits_9to8_least_significant_bit);
+    
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&abz_resolution_bits_7to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
         return PICO_ERROR_GENERIC;
@@ -200,10 +217,8 @@ int32_t read_abz_resolution_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t abz_resolution_bits_7to0_result = i2c_buffer;
-
-    int32_t abz_resolution = abz_resolution_bits_9to8_most_significant_bit << 8 || abz_resolution_bits_7to0_result;
-
+    uint8_t abz_resolution_bits_7to0_result = i2c_buffer;
+    int32_t abz_resolution = (abz_resolution_bits_9to8_result << 8) | abz_resolution_bits_7to0_result;
 
     return abz_resolution;
 }
@@ -233,7 +248,7 @@ int8_t read_hyst_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t hyst_2_bit_result = i2c_buffer && 0b00000001 << hyst_2_bit;
+    int32_t hyst_2_bit_result = i2c_buffer & (0b00000001 << hyst_2_bit);
 
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&hyst_bits_1to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
@@ -245,10 +260,10 @@ int8_t read_hyst_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t hyst_bits_1to0_result = i2c_buffer && generate_bit_mask(hyst_bits_1to0_most_significant_bit,hyst_bits_1to0_least_significant_bit);
+    int32_t hyst_bits_1to0_result = i2c_buffer & generate_bit_mask(hyst_bits_1to0_most_significant_bit,hyst_bits_1to0_least_significant_bit);
 
 
-    int32_t hyst = hyst_2_bit_result << 3 && hyst_bits_1to0_result;
+    int32_t hyst = (hyst_2_bit_result << 3) | hyst_bits_1to0_result;
 
     return hyst;
 }
@@ -289,7 +304,7 @@ int32_t read_z_pulse_width_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t z_pulse_width_result = i2c_buffer && generate_bit_mask(z_pulse_width_most_significant_bit,z_pulse_width_least_significant_bit);
+    int32_t z_pulse_width_result = i2c_buffer & generate_bit_mask(z_pulse_width_most_significant_bit,z_pulse_width_least_significant_bit);
 
     return z_pulse_width_result;
 }
@@ -330,7 +345,7 @@ uint32_t read_zero_position_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t zero_position_bits_11to8_result = i2c_buffer && generate_bit_mask(zero_position_bits_11to8_register_most_significant_bit,zero_position_bits_11to8_register_least_significant_bit);
+    int32_t zero_position_bits_11to8_result = i2c_buffer & generate_bit_mask(zero_position_bits_11to8_register_most_significant_bit,zero_position_bits_11to8_register_least_significant_bit);
 
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&zero_position_bits_7to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
@@ -344,7 +359,7 @@ uint32_t read_zero_position_value(){
 
     int32_t zero_position_bits_7to0_result = i2c_buffer;
 
-    int32_t zero_position = zero_position_bits_11to8_result << 8 || zero_position_bits_7to0_result;
+    int32_t zero_position = (zero_position_bits_11to8_result << 8) | zero_position_bits_7to0_result;
 
 
     return zero_position;
@@ -373,7 +388,7 @@ uint32_t read_out_mode_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t dir_bit_result = i2c_buffer && 0b00000001 << out_mode_bit;
+    int32_t dir_bit_result = i2c_buffer & (0b00000001 << out_mode_bit);
 
     return dir_bit_result;
 }
@@ -399,7 +414,7 @@ uint32_t read_a_stop_position_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t a_stop_bits_11to8_result = i2c_buffer && generate_bit_mask(a_stop_bits_11to8_register_most_significant_bit,a_stop_bits_11to8_register_least_significant_bit);
+    int32_t a_stop_bits_11to8_result = i2c_buffer & generate_bit_mask(a_stop_bits_11to8_register_most_significant_bit,a_stop_bits_11to8_register_least_significant_bit);
 
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&a_stop_bits_7to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
@@ -413,7 +428,7 @@ uint32_t read_a_stop_position_value(){
 
     int32_t a_stop_bits_7to0_result = i2c_buffer;
 
-    int32_t a_stop = a_stop_bits_11to8_result << 8 || a_stop_bits_7to0_result;
+    int32_t a_stop = (a_stop_bits_11to8_result << 8) | a_stop_bits_7to0_result;
 
 
     return a_stop;
@@ -441,7 +456,7 @@ uint32_t read_a_start_position_value(){
         return PICO_ERROR_GENERIC;
     }
 
-    int32_t a_start_bits_11to8_result = i2c_buffer && generate_bit_mask(a_start_bits_11to8_register_most_significant_bit,a_start_bits_11to8_register_least_significant_bit);
+    int32_t a_start_bits_11to8_result = i2c_buffer & generate_bit_mask(a_start_bits_11to8_register_most_significant_bit,a_start_bits_11to8_register_least_significant_bit);
 
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&a_start_bits_7to0_register,1,true);
     if(status == PICO_ERROR_GENERIC){
@@ -455,7 +470,7 @@ uint32_t read_a_start_position_value(){
 
     int32_t a_start_bits_7to0_result = i2c_buffer;
 
-    int32_t a_start = a_start_bits_11to8_result << 8 || a_start_bits_7to0_result;
+    int32_t a_start = (a_start_bits_11to8_result << 8) | a_start_bits_7to0_result;
 
 
     return a_start;
@@ -472,7 +487,7 @@ float decode_a_start_value(int32_t field_value){
 }
 
 int32_t read_current_absolute_position(){
-    int32_t status = 0;/*
+    int32_t status = 0;
     status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&absolute_position_bits_13to6_register,1,true);
     if(status == PICO_ERROR_GENERIC){
         return PICO_ERROR_GENERIC;
@@ -495,9 +510,8 @@ int32_t read_current_absolute_position(){
         return PICO_ERROR_GENERIC;
     }
     
-    int32_t absolute_position_bits_5to0_result = i2c_buffer && generate_bit_mask(absolute_position_bits_5to0_most_significant_bit,absolute_position_bits_5to0_least_significant_bit);
-*/
-    int32_t absolute_position = 4;//(absolute_position_bits_13to6_result << 6) || absolute_position_bits_5to0_result;
+    int32_t absolute_position_bits_5to0_result = i2c_buffer & generate_bit_mask(absolute_position_bits_5to0_most_significant_bit,absolute_position_bits_5to0_least_significant_bit);
+    int32_t absolute_position = (absolute_position_bits_13to6_result << 6) | absolute_position_bits_5to0_result;
 
     return absolute_position;
 }
@@ -506,24 +520,83 @@ float decode_absolute_position(int32_t field_value){
     return (float)field_value*360/16384;
 }
 
+
+/*UVW_MUX- UVW OUTPUT TYPE [QFN PACKAGE ONLY] 0:UVW 1:-A-B-Z
+ABZ_MUX- ABZ OUTPUT TYPE 0:ABZ 1:UVW
+DIR- ROTATION DIRECTION 0:CCW 1:CW
+UVW_RES- UVW OUTPUT RESOLUTION, Between 1 and 16, STORED AS HEXADECIMAL EQUAL TO THE RESOLUTION -1 (ex. 0x1 = 2)
+ABZ_RES- ABZ OUTPUT RESOLUTION (Pulses Per Revolution), Between 1 and 1024, STORED AS HEXADECIMAL EQUAL TO THE RESOLUTION -1 (ex. 0x1 = 2)
+HYST- HYSTERESIS FILTER PARAMETER (0x0:1 0x1:2 0x2:4 0x3:8 0x4:0 0x5:.25 0x6:0.5 0x7:1)
+Z_PULSE_WIDTH- WIDTH OF THE Z PULSE IN LEAST SIGNIFICANT BITS OR DEGREES (0x0:1 0x1:2 0x3:4 0x3:8 0x4:12 0x5:16 0x6:180degrees 0x7:1)
+ZERO- ZERO DEGREE POSITION, GIVEN BY 360deg/4096*VALUE, WHERE VALUE IS BETWEEN 0 AND 4095
+PWM_FREQ- PWM FRAME FREQUENCY (0x0:994.4hz 0x1:497.2hz)
+PWM_POL- WHETHER PWM HIGH OR LOW IS DATA (0x0:HIGH 0x1:LOW)
+OUT_MODE- DETERMINES THE TYPE OF OUTPUT FROM THE 'OUT' PIN (0x0:ANALOG 0x1:PWM_OUTPUT)
+A_START- DETERMINES THE START ANGLE OF THE ANALOG OUTPUT, GIVEN BY 360deg/4096*VALUE, WHERE VALUE IS BETWEEN 0 AND 4095
+A_STOP- DETERMINES THE STOP ANGLE OF THE ANALOG OUTPUT, GIVEN BY 360deg/4096*VALUE, WHERE VALUE IS BETWEEN 0 AND 4095*/
 int32_t read_and_report_via_usb_MT6701_eeprom_values(){
-    int32_t status = 0;
-    status = i2c_write_blocking(i2c_default,mt6701_i2c_address,&absolute_position_bits_13to6_register,1,true);
-    if(status == PICO_ERROR_GENERIC){
-        return PICO_ERROR_GENERIC;
+    int32_t abz_mux = read_abz_mux_bit();
+    if(abz_mux == PICO_ERROR_GENERIC){
+        printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
     }
+    printf("MT6701 ABZ_MUX BIT: %s\n",decode_abz_mux_value(abz_mux));
 
+    int32_t dir = read_dir_bit();
+    if(dir == PICO_ERROR_GENERIC){
+        printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+    }
+    printf("MT6701 DIR BIT: %s\n",decode_dir_value(dir));
+    
 
+    int32_t abz_resolution = read_abz_resolution_value();
+    if(abz_resolution == PICO_ERROR_GENERIC){
+        printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+    }
+    printf("MT6701 ABZ_RES: %ld\n",decode_abz_resolution_value(abz_resolution));
 
+    int32_t hyst = read_hyst_value();
+    if(hyst == PICO_ERROR_GENERIC){
+        printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+    }
+    printf("MT6701 HYST: %f\n",decode_hyst_value(hyst));
+
+    int32_t z_pulse_width = read_z_pulse_width_value();
+    if(z_pulse_width == PICO_ERROR_GENERIC){
+        printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+    }
+    printf("MT6701 Z_PULSE_WIDTH: %s\n",decode_z_pulse_width_value(z_pulse_width));
+
+    int32_t zero_position = read_zero_position_value();
+    if(zero_position == PICO_ERROR_GENERIC){
+        printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+    }
+    printf("MT6701 ZERO_POSITION: %f\n",decode_zero_position_value(zero_position));
+
+    int32_t out_mode = read_out_mode_value();
+    if(out_mode == PICO_ERROR_GENERIC){
+        printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+    }
+    printf("MT6701 OUT_MODE: %s\n",decode_out_mode_value(out_mode));
+
+    int32_t analog_start_position = read_a_start_position_value();
+    if(analog_start_position == PICO_ERROR_GENERIC){
+        printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+    }
+    printf("MT6701 ANALOG_START_POSITION: %f\n",decode_a_start_value(analog_start_position));
+
+    int32_t analog_stop_position = read_a_stop_position_value();
+    if(analog_stop_position == PICO_ERROR_GENERIC){
+        printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+    }
+    printf("MT6701 ANALOG_STOP_POSITION: %f\n",decode_a_stop_value(analog_stop_position));
+    
 }
 
 /*Activates i2C pins and checks for and return true if a valid position response is recieved from MT6701 encoder.*/
 void begin_i2c_with_MT6701(){
     gpio_set_function(MT6701_I2C_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(MT6701_I2C_SCL_PIN, GPIO_FUNC_I2C);
-    if(read_current_absolute_position() == PICO_ERROR_GENERIC){
-        printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
-    }    
+    i2c_init(i2c_default,100000);
 }
 
 void end_i2c_with_MT6701(){
@@ -533,9 +606,9 @@ void end_i2c_with_MT6701(){
 
 PIO pio = pio0;
 const uint sm = 0;
-const uint MT6701_channel_a_pin = MT6701_CHANNEL_A_PIN;
 
 void initialize_MT6701(){
+    gpio_init(MT6701_ENCODER_MODE_PIN);
     gpio_pull_up(MT6701_ENCODER_MODE_PIN);
     gpio_set_dir(MT6701_ENCODER_MODE_PIN,true);
     gpio_put(MT6701_ENCODER_MODE_PIN,true);
@@ -545,29 +618,64 @@ void initialize_MT6701(){
 
     gpio_pull_up(MT6701_I2C_SDA_PIN);
     gpio_pull_up(MT6701_I2C_SCL_PIN);
-    i2c_init(i2c_default,100000);
 
     begin_i2c_with_MT6701();
+    
+    read_and_report_via_usb_MT6701_eeprom_values();
+    
+    if(ENFORCE_MT6701_EEPROM_DEFAULTS){
+        int32_t abz_mux = read_abz_mux_bit();
+        if(abz_mux == PICO_ERROR_GENERIC){
+            printf("CRITICAL ERROR: MT6701 ENCODER NOT RESPONSIVE\n");
+        }
+        if(decode_abz_mux_value(abz_mux) != DEFAULT_MT6701_ABZ_MUX){
+            printf("ABZ_MUX EEPROM VALUE DOES NOT MATCH ENFORCED DEFAULT. WRITING DEFAULT TO EEPROM.\n");
 
-    int32_t dir = read_dir_bit();
-    printf("ENCODER DIR BIT: ");
-    printf(decode_dir_value(dir));
-    printf("\n");
+            i2c_write_blocking(i2c_default,mt6701_i2c_address,&abz_mux_register,1,true);
+            i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
+            uint8_t abz_mux_register_value = i2c_buffer;
+
+            uint8_t default_abz_mux_bit_value = encode_abz_mux_value(DEFAULT_MT6701_ABZ_MUX);
+            uint8_t new_abz_mux_register_value = (abz_mux_register_value & (0b11111111 ^ (0b00000001 << abz_mux_bit))) | (default_abz_mux_bit_value << abz_mux_bit);
+            uint8_t abc_register_i2c_data[] = {abz_mux_register,new_abz_mux_register_value};
+            i2c_write_blocking(i2c_default,mt6701_i2c_address,abc_register_i2c_data,2,false);
+
+            i2c_write_blocking(i2c_default,mt6701_i2c_address,programming_key,2,false);
+            i2c_write_blocking(i2c_default,mt6701_i2c_address,programming_command,2,false);
+            sleep_ms(1000);
+            printf("WRITE COMPLETE. PLEASE REMOVE POWER FROM DEVICE.\n");
+
+        }
+
+        read_and_report_via_usb_MT6701_eeprom_values();
+    }
 
     end_i2c_with_MT6701();
 
-    //uint offset = pio_add_program(pio, &quadrature_encoder_program);
-    //quadrature_encoder_program_init(pio, sm, offset, MT6701_channel_a_pin, 0);
+    gpio_set_function(MT6701_CHANNEL_A_PIN, GPIO_FUNC_PIO0);
+    gpio_set_function(MT6701_CHANNEL_B_PIN, GPIO_FUNC_PIO0);    
+
+    uint offset = pio_add_program(pio, &quadrature_encoder_program);
+    quadrature_encoder_program_init(pio, sm, offset, MT6701_CHANNEL_A_PIN, 0);
+
+    gpio_put(MT6701_ENCODER_MODE_PIN,false);
 }
 
 void print_current_absolute_position(){
-    //begin_i2c_with_MT6701();
+    begin_i2c_with_MT6701();
     int32_t current_position = read_current_absolute_position();
+    if(current_position == PICO_ERROR_GENERIC){
+        printf("ENCODER POSITION READ ERROR\n");
+    }
+    else{
     float decoded_absolute_position = decode_absolute_position(current_position);
     printf("CURRENT POSITION: %f\n",decoded_absolute_position);
-    //end_i2c_with_MT6701();
+    }
+    end_i2c_with_MT6701();
 }
 
-
+int32_t get_MT6701_quadrature_count(){
+    return quadrature_encoder_get_count(pio, sm);
+}
 
 
