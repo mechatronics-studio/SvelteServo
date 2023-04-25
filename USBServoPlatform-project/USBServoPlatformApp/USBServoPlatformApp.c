@@ -38,7 +38,7 @@ void core1_main(){
 
         //print_current_absolute_position();
         //printf("ENCODER VALUE: %ld\n",get_MT6701_quadrature_count());
-        busy_wait_ms(1000);
+        //busy_wait_ms(1000);
     }
 
 }
@@ -56,7 +56,7 @@ int main(){
     uint8_t core0_ready_response_recieved = CORE1_RESPONSE_NOT_YET_PROVIDED;
 
     while(core0_ready_response_recieved != CORE1_RESPONSE_MATCHED_EXPECTED){
-        sleep_ms(10);
+        sleep_ms(100);
         core0_ready_response_recieved = check_response_from_core1(CORE1_READY_EXECUTIVE_CALL,CORE1_READY_SUPPORTING_INPUT,CORE1_READY_SUPPORTING_INPUT);
         #ifdef MASTER_DEBUG
         if(core0_ready_response_recieved == CORE1_RESPONSE_NOT_YET_PROVIDED){

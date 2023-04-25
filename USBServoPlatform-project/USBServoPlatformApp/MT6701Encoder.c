@@ -13,27 +13,27 @@
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
 | Reg. Address | bit7      | bit6            | bit5            | bit4            | bit3       | bit2       | bit1      | bit0      |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 37           | UVW_MUX   | XXXXXXXXXXXXXXX | XXXXXXXXXXXXXXX | XXXXXXXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXX | XXXXXXXXX |
+| 0x25         | UVW_MUX   | XXXXXXXXXXXXXXX | XXXXXXXXXXXXXXX | XXXXXXXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXX | XXXXXXXXX |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 41           | XXXXXXXXX | ABZ_MUX         | XXXXXXXXXXXXXXX | XXXXXXXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | DIR       | XXXXXXXXX |
+| 0x29         | XXXXXXXXX | ABZ_MUX         | XXXXXXXXXXXXXXX | XXXXXXXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | DIR       | XXXXXXXXX |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 48           | UVW_RES_3 | UVW_RES_2       | UVW_RES_1       | UVW_RES_0       | XXXXXXXXXX | XXXXXXXXXX | ABZ_RES_9 | ABZ_RES_8 |
+| 0x30         | UVW_RES_3 | UVW_RES_2       | UVW_RES_1       | UVW_RES_0       | XXXXXXXXXX | XXXXXXXXXX | ABZ_RES_9 | ABZ_RES_8 |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 49           | ABZ_RES_7 | ABZ_RES_6       | ABZ_RES_5       | ABZ_RES_4       | ABZ_RES_3  | ABZ_RES_2  | ABZ_RES_1 | ABZ_RES_0 |
+| 0x31         | ABZ_RES_7 | ABZ_RES_6       | ABZ_RES_5       | ABZ_RES_4       | ABZ_RES_3  | ABZ_RES_2  | ABZ_RES_1 | ABZ_RES_0 |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 50           | HYST_2    | Z_PULSE_WIDTH_2 | Z_PULSE_WIDTH_1 | Z_PULSE_WIDTH_0 | ZERO_11    | ZERO_10    | ZERO_9    | ZERO_8    |
+| 0x32         | HYST_2    | Z_PULSE_WIDTH_2 | Z_PULSE_WIDTH_1 | Z_PULSE_WIDTH_0 | ZERO_11    | ZERO_10    | ZERO_9    | ZERO_8    |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 51           | ZERO_7    | ZERO_6          | ZERO_5          | ZERO_4          | ZERO_3     | ZERO_2     | ZERO_1    | ZERO_0    |
+| 0x33         | ZERO_7    | ZERO_6          | ZERO_5          | ZERO_4          | ZERO_3     | ZERO_2     | ZERO_1    | ZERO_0    |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 52           | HYST_1    | HYST_0          | XXXXXXXXXXXXXXX | XXXXXXXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXX | XXXXXXXXX |
+| 0x34         | HYST_1    | HYST_0          | XXXXXXXXXXXXXXX | XXXXXXXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXX | XXXXXXXXX |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 56           | PWM_FREQ  | PWM_POL         | OUT_MODE        | XXXXXXXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXX | XXXXXXXXX |
+| 0x38         | PWM_FREQ  | PWM_POL         | OUT_MODE        | XXXXXXXXXXXXXXX | XXXXXXXXXX | XXXXXXXXXX | XXXXXXXXX | XXXXXXXXX |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 62           | A_STOP_11 | A_STOP_10       | A_STOP_9        | A_STOP_8        | A_START_11 | A_START_10 | A_START_9 | A_START_8 |
+| 0x3E         | A_STOP_11 | A_STOP_10       | A_STOP_9        | A_STOP_8        | A_START_11 | A_START_10 | A_START_9 | A_START_8 |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 63           | A_START_7 | A_START_6       | A_START_5       | A_START_4       | A_START_3  | A_START_2  | A_START_1 | A_START_0 |
+| 0x3F         | A_START_7 | A_START_6       | A_START_5       | A_START_4       | A_START_3  | A_START_2  | A_START_1 | A_START_0 |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
-| 64           | A_STOP_7  | A_STOP_6        | A_STOP_5        | A_STOP_4        | A_STOP_3   | A_STOP_2   | A_STOP_1  | A_STOP_0  |
+| 0x40         | A_STOP_7  | A_STOP_6        | A_STOP_5        | A_STOP_4        | A_STOP_3   | A_STOP_2   | A_STOP_1  | A_STOP_0  |
 +--------------+-----------+-----------------+-----------------+-----------------+------------+------------+-----------+-----------+
 UVW_MUX- UVW OUTPUT TYPE [QFN PACKAGE ONLY] 0:UVW 1:-A-B-Z
 ABZ_MUX- ABZ OUTPUT TYPE 0:ABZ 1:UVW
@@ -50,74 +50,78 @@ A_START- DETERMINES THE START ANGLE OF THE ANALOG OUTPUT, GIVEN BY 360deg/4096*V
 A_STOP- DETERMINES THE STOP ANGLE OF THE ANALOG OUTPUT, GIVEN BY 360deg/4096*VALUE, WHERE VALUE IS BETWEEN 0 AND 4095
 */
 
-const uint8_t abz_mux_register_address = 41;
+
+const uint8_t uvw_mux_register_address = 0x25;
+const uint8_t uvw_mux_bit = 7;
+
+const uint8_t abz_mux_register_address = 0x29;
 const uint8_t abz_mux_bit = 6;
 
-const uint8_t direction_register_address = 41;
+const uint8_t direction_register_address = 0x29;
 const uint8_t direction_bit = 1;
 
-const uint8_t abz_resolution_bits_9to8_register_address = 48;
+const uint8_t abz_resolution_bits_9to8_register_address = 0x30;
 const uint8_t abz_resolution_bits_9to8_least_significant_bit = 0;
 const uint8_t abz_resolution_bits_9to8_most_significant_bit = 1;
 const uint8_t abz_resolution_bits_9to8_size = abz_resolution_bits_9to8_most_significant_bit-abz_resolution_bits_9to8_least_significant_bit+1;
 
-const uint8_t abz_resolution_bits_7to0_register_address = 49;
+const uint8_t abz_resolution_bits_7to0_register_address = 0x31;
 const uint8_t abz_resolution_bits_7to0_least_significant_bit = 0;
 const uint8_t abz_resolution_bits_7to0_most_significant_bit = 7;
 const uint8_t abz_resolution_bits_7to0_size = abz_resolution_bits_7to0_most_significant_bit-abz_resolution_bits_7to0_least_significant_bit+1;
 
-const uint8_t hyst_2_bit_register_address = 50;
+const uint8_t hyst_2_bit_register_address = 0x32;
 const uint8_t hyst_2_bit = 7;
 
-const uint8_t hyst_bits_1to0_register_address = 52;
+const uint8_t hyst_bits_1to0_register_address = 0x34;
 const uint8_t hyst_bits_1to0_least_significant_bit = 6;
 const uint8_t hyst_bits_1to0_most_significant_bit = 7;
 const uint8_t hyst_bits_1to0_size = hyst_bits_1to0_most_significant_bit-hyst_bits_1to0_least_significant_bit+1;
 
-const uint8_t z_pulse_width_register_address = 50;
+const uint8_t z_pulse_width_register_address = 0x32;
 const uint8_t z_pulse_width_least_significant_bit = 4;
 const uint8_t z_pulse_width_most_significant_bit = 6;
 const uint8_t z_pulse_width_size = z_pulse_width_most_significant_bit-z_pulse_width_least_significant_bit+1;
 
-const uint8_t zero_position_bits_11to8_register_address = 50;
+const uint8_t zero_position_bits_11to8_register_address = 0x32;
 const uint8_t zero_position_bits_11to8_least_significant_bit = 0;
 const uint8_t zero_position_bits_11to8_most_significant_bit = 3;
 const uint8_t zero_position_bits_11to8_size = zero_position_bits_11to8_most_significant_bit-zero_position_bits_11to8_least_significant_bit+1;
 
-const uint8_t zero_position_bits_7to0_register_address = 51;
+const uint8_t zero_position_bits_7to0_register_address = 0x33;
 const uint8_t zero_position_bits_7to0_least_significant_bit = 0;
 const uint8_t zero_position_bits_7to0_most_significant_bit = 7;
 const uint8_t zero_position_bits_7to0_size = zero_position_bits_7to0_most_significant_bit-zero_position_bits_7to0_least_significant_bit+1;
 
-const uint8_t out_mode_register_address = 56;
+const uint8_t out_mode_register_address = 0x38;
 const uint8_t out_mode_bit = 5;
 
-const uint8_t a_start_bits_11to8_register_address = 62;
+const uint8_t a_start_bits_11to8_register_address = 0x3E;
 const uint8_t a_start_bits_11to8_least_significant_bit = 0;
 const uint8_t a_start_bits_11to8_most_significant_bit = 3;
 const uint8_t a_start_bits_11to8_size = a_start_bits_11to8_most_significant_bit-a_start_bits_11to8_least_significant_bit+1;
 
-const uint8_t a_start_bits_7to0_register_address = 63;
+const uint8_t a_start_bits_7to0_register_address = 0x3F;
 const uint8_t a_start_bits_7to0_least_significant_bit = 0;
 const uint8_t a_start_bits_7to0_most_significant_bit = 7;
 const uint8_t a_start_bits_7to0_size = a_start_bits_7to0_most_significant_bit-a_start_bits_7to0_least_significant_bit+1;
 
-const uint8_t a_stop_bits_11to8_register_address = 62;
+const uint8_t a_stop_bits_11to8_register_address = 0x3E;
 const uint8_t a_stop_bits_11to8_least_significant_bit = 4;
 const uint8_t a_stop_bits_11to8_most_significant_bit = 7;
 const uint8_t a_stop_bits_11to8_size = a_stop_bits_11to8_most_significant_bit-a_stop_bits_11to8_least_significant_bit+1;
 
-const uint8_t a_stop_bits_7to0_register_address = 64;
+const uint8_t a_stop_bits_7to0_register_address = 0x40;
 const uint8_t a_stop_bits_7to0_least_significant_bit = 0;
 const uint8_t a_stop_bits_7to0_most_significant_bit = 7;
 const uint8_t a_stop_bits_7to0_size = a_stop_bits_7to0_most_significant_bit-a_stop_bits_7to0_least_significant_bit+1;
 
-const uint8_t absolute_position_bits_13to6_register_address = 3;
+const uint8_t absolute_position_bits_13to6_register_address = 0x03;
 const uint8_t absolute_position_bits_13to6_least_significant_bit = 0;
 const uint8_t absolute_position_bits_13to6_most_significant_bit = 7;
 const uint8_t absolute_position_bits_13to6_size = absolute_position_bits_13to6_most_significant_bit-absolute_position_bits_13to6_least_significant_bit+1;
 
-const uint8_t absolute_position_bits_5to0_register_address = 4;
+const uint8_t absolute_position_bits_5to0_register_address = 0x04;
 const uint8_t absolute_position_bits_5to0_least_significant_bit = 2;
 const uint8_t absolute_position_bits_5to0_most_significant_bit = 7;
 const uint8_t absolute_position_bits_5to0_size = absolute_position_bits_5to0_most_significant_bit-absolute_position_bits_5to0_least_significant_bit+1;
@@ -128,6 +132,13 @@ const uint8_t programming_key_step1[] = {0x09,0xB3};
 const uint8_t programming_command_step2[] = {0x0A,0x05};
 
 uint8_t i2c_buffer;
+
+void print_8_bit_int_in_binary(int8_t num) {
+    int i;
+    for (i = 7; i >= 0; i--) {
+        printf("%d", (num >> i) & 1);
+    }
+}
 
 uint8_t generate_bit_mask(uint8_t most_signifcant_bit, uint8_t least_significant_bit) {
     uint8_t mask = 0;
@@ -171,9 +182,24 @@ uint8_t merge_bitfield_onto_register(uint8_t register_value, uint8_t bitfield_va
     return register_value;
 }
 
+void print_all_MT6701_EEPROM_registers(){
+    uint8_t num_registers = 11;
+    uint8_t registers_to_print[] = {uvw_mux_register_address, abz_mux_register_address, abz_resolution_bits_9to8_register_address,
+                                abz_resolution_bits_7to0_register_address,z_pulse_width_register_address,zero_position_bits_7to0_register_address,
+                                hyst_bits_1to0_register_address,out_mode_register_address,a_stop_bits_11to8_register_address,a_start_bits_7to0_register_address,a_stop_bits_7to0_register_address};
+    printf("BEGIN_MT6701_EEPROM_DUMP\n");
+    for(uint8_t i = 0; i < num_registers; i++){
+        i2c_write_blocking(i2c_default,mt6701_i2c_address,&registers_to_print[i],1,true);
+        i2c_read_blocking(i2c_default,mt6701_i2c_address,&i2c_buffer,1,false);
 
-    //uint8_t bitfield_mask = generate_bit_mask(most_significant_bit,least_significant_bit);
-    //return ((register_value & bitfield_mask) & (bitfield_value << least_significant_bit)) | register_value;
+        uint8_t register_value = i2c_buffer;
+        printf("0x%02X: ",registers_to_print[i]);
+        print_8_bit_int_in_binary(register_value);
+        printf("\n");
+    }
+    printf("END_MT6701_EEPROM_DUMP\n");
+}
+
 void write_eeprom_programming_sequence(){
     i2c_write_blocking(i2c_default,mt6701_i2c_address,programming_key_step1,2,false);
     i2c_write_blocking(i2c_default,mt6701_i2c_address,programming_command_step2,2,false);
@@ -821,6 +847,9 @@ void initialize_MT6701(){
     read_and_report_via_usb_MT6701_eeprom_values();
     
     if(ENFORCE_MT6701_EEPROM_DEFAULTS){
+        if(REPORT_MT6701_EEPROM_BEFORE_AND_AFTER_ENFORCE){
+            print_all_MT6701_EEPROM_registers();
+        }
         bool eeprom_values_updated = false;
         
         if(enforce_abz_mux_by_key(DEFAULT_MT6701_ABZ_MUX_KEY)){
@@ -842,6 +871,10 @@ void initialize_MT6701(){
             printf("EEPROM PROGRAMMING COMPLETE. UPDATED EEPROM VALUES:\n");
             }
             read_and_report_via_usb_MT6701_eeprom_values();
+        }
+
+        if(REPORT_MT6701_EEPROM_BEFORE_AND_AFTER_ENFORCE){
+            print_all_MT6701_EEPROM_registers();
         }
     }
 

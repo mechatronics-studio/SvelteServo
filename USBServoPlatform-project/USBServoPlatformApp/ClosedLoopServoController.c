@@ -60,7 +60,7 @@ int64_t update_servo_voltage_absolute_position_mode(int32_t alarm_ID, void* empt
     }
 
     //ANTI-INT32 ROLLOVER, NEED TO FORMALIZE BETTER, BUT I WAS FINDING THAT VERY LARGE STEP CHANGES WITH LARGE ERRORS WOULD CAUSE A ROLLOVER OF THE VOLTAGE.
-    if(error_counts > 10000){
+    /*if(error_counts > 10000){
         error_counts = 10000;
     }
     else if(error_counts < -10000){
@@ -72,7 +72,7 @@ int64_t update_servo_voltage_absolute_position_mode(int32_t alarm_ID, void* empt
     }
     else if(error_dot_counts_per_second < -1000000){
              error_dot_counts_per_second = -1000000;   
-    }
+    }*/
 
     //printf("ERROR: %ld, ERROR_DOT: %ld, INTEGRATOR: %ld\n", error_counts, error_dot_counts_per_second, integrated_error_counts);
     proportional_control_voltage = ((int32_t)proportional_gain_core1*error_counts)/1000;
@@ -81,7 +81,6 @@ int64_t update_servo_voltage_absolute_position_mode(int32_t alarm_ID, void* empt
     //printf("PROPORTIONAL_VOLTAGE: %ld, DERIVATIVE_VOLTAGE: %ld, INTEGRATOR_VOLTAGE: %ld\n", proportional_control_voltage, derivative_control_voltage, integral_control_voltage);
     
     commanded_control_voltage_mv = proportional_control_voltage + derivative_control_voltage + integral_control_voltage;
-
 
     if(commanded_control_voltage_mv > motor_supply_volage_mv){
         commanded_control_voltage_mv = motor_supply_volage_mv;

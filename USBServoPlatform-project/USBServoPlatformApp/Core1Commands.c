@@ -647,7 +647,7 @@ void setup_core1_peripherals(){
 
     initialize_MT6701();
     #ifdef MASTER_DEBUG
-    printf("%lld Core1: Enocder Initialized.\n", time_us_64());
+    printf("%lld Core1: Encoder Initialized.\n", time_us_64());
     #endif
     
     set_LED_mode(3,core1_alarm_pool);
